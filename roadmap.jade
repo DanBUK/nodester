@@ -1,0 +1,58 @@
+!!! 5
+html(lang="en")
+  head
+    title Nodester Roadmap
+  body
+    :markdown
+      # Nodester Roadmap      
+      We are currently a non versioned application and this needs to fixed. Therefore the following is a rough roadmap for the project.
+      ### Pre Work
+      There are various issues that require resolution. Some have been planned, others are still awaiting completion.
+      #### Issues from GitHub Issue Tracker
+      - 15 Replace curl line from scripts/gitrepoclone.sh to be a JS script
+      - 26 NPM Modules list action support? (143. Allows to be fixed.)
+      - 32 Use package.json for npm dependencies
+      - 79 Need a way to add more SSH Keys.
+      - 80 globals undefined. (143. Fixes.)
+      - 110 Allow for an app to configure how many processes it runs on. 
+      - 116 Timezone Bug using node-time. (143. Fixes.)
+      - 117 startfile in a subfolder. (143. Fixes.)
+      - 123 _dirname and _filename is not correct. (143. Fixes.)
+      - 126 push fails after gitreset (.git/FETCH_HEAD: Permission denied). (143. Fixes.)
+      - 137 Add a Password Reset feature to Nodester.
+      - 138 Add flash policy file on port 843. (Fix already commited, in testing.)
+      - 143 chroot v0.5
+      ### Version 0.5
+      - Once all issues relating to 143 have been fixed.
+      - 137 Fixed.
+      - 138 Fixed.
+      - WebSocket support is stable.
+      ### Version 0.6
+      - Merge in work on git scripts. Will fix 15 and 79.
+      ### Version 0.7
+      - 32 Fixed.
+      ### Version 0.8
+      - job_instance and job_master are in use, fixing 110.
+      ### Version 0.9
+      - Tests of API written.
+      ### Version 1.0
+      - All has been running stable for ~1month.
+      - Log streaming is available.
+
+      ### Version 2.0
+      Work on this version will be completed in parallel.
+      
+      - machine runner - Design
+        - job manager is Design
+        - job instance is WIP
+      
+      The following are actually then jobs under machine_runner.
+      
+      - front lb is WIP
+      - head lb - WIP
+      - db node - WIP
+      - api node - Design
+      
+      Documents on these to follow.
+      
+        
