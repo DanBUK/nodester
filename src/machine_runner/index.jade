@@ -23,6 +23,9 @@ html(lang="en")
           - https ports: 0
           - tcp ports: 0
           - udp ports: 0
+      ## Sub Modules
+      - Job Manager
+      - Job Instance
       ## Backend Processes
       - Polls DB VIP for Jobs and launches.
       - Ensures job stays running, if it crashes N times in X seconds, stop restarting and alert.

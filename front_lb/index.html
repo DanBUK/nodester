@@ -1,4 +1,58 @@
 <!DOCTYPE html><html lang="en"><head><title>Nodester Front LB</title></head><body><h1>Front LB</h1>
 
-<p>Handles incoming HTTP/HTTPS requests and directs them to clusters.
-<strong>TBC</strong>.</p></body></html>
+<p>Handles incoming HTTP/HTTPS/TCP/UDP requests and directs them to clusters.
+Works in pairs, active/passive utilising simple heart beating and ARP broadcast failover.</p>
+
+<h2>Variables</h2>
+
+<ul>
+<li>free ports: { tcp: { from: 10000, to: 60000 }, udp: { from: 10000, to: 60000 } }</li>
+<li>machine id: &#39;node01&#39;</li>
+<li>peers: { &#39;192.168.111.2&#39;: { port: 778, state: -1 }}</li>
+<li>external ips: { &#39;7.7.7.7&#39;: { peer: &#39;192.168.111.2&#39;, pools: [&#39;pool name A&#39;] } }</li>
+<li>pools: [ .. .. ]
+<ul><li>id: &#39;pool name A&#39;</li>
+<li>external ips: [&#39;7.7.7.7&#39;]</li>
+<li>type: [ http | https | tcp | tcpssl | udp ]</li>
+<li>ssl: [ true | false ] - Auto set for https/tcpssl
+<ul><li>sslopts: { key: &#39;str of key&#39;, cert: &#39;str of cer&#39;, ca: &#39;str of ca&#39; }</li></ul></li>
+<li>key: [ http: &#39;example.com&#39; | https: &#39;example.com&#39; | tcp: 10000 | tcpssl: 10000 | udp: 10000 ]</li>
+<li>lookup type: hash ring</li>
+<li>persistent: true</li>
+<li>persistent cache: { }</li>
+<li>state: -1</li>
+<li>nodes: [ .. .. ]
+<ul><li>{ host: &#39;192.168.222.1&#39;, port: 10000, state: -1, last check: -1 }</li>
+<li>{ host: &#39;192.168.222.2&#39;, port: 10000, state: -1, last check: -1 }</li></ul></li>
+<li>.. ..</li></ul></li>
+</ul>
+
+<h2>Sub Modules</h2>
+
+<ul>
+<li>node-lb
+<ul><li>node-http-proxy</li></ul></li>
+</ul>
+
+<h2>Backend Processes</h2>
+
+<ul>
+<li>Polls DB VIP for Peers, External IPs, Pools and launches them.</li>
+<li>Monitors nodes for availability</li>
+<li>Services can bubble up from Head LB via API</li>
+<li>Listens for HTTP API Calls
+<ul><li>List</li>
+<li>ListPeers</li>
+<li>ListExternalIPs</li>
+<li>ListPools</li>
+<li>AddPeer IP, Port, State</li>
+<li>AddExternalIP IP, Peer, Pools=[]</li>
+<li>AddPool ID, ExternalIP=undefined, Type, Key, LookupType, State, Nodes=[][, ssl key, ssl cert, ssl ca]</li>
+<li>AddPoolToExternalIP ID, ExternalIP</li>
+<li>AddNodeToPool IP, Port, State, ID</li>
+<li>DelPeer IP</li>
+<li>DelExternalIP IP</li>
+<li>DelPool ID</li>
+<li>DelPoolFromExternalIP ID, ExternalIP</li>
+<li>DelNodeFromPool IP, Port, ID</li></ul></li>
+</ul></body></html>
