@@ -6,4 +6,31 @@ html(lang="en")
     :markdown
       # Machine Runner
       A process that sits on a server and manages processes. Similar to /sbin/init; but rather than taking commands from the cli it takes network commands to setup, start, stop, restart, etc applications.
-      **TBC**.
+      ## Variables
+      - free ports: { tcp: { from: 10000, to: 60000 }, udp: { from: 10000, to: 60000 } }
+      - machine_id: 'node01'
+      - jobs: [.. ..]
+          - job id: 'job1'
+          - hostname: 'job1.example.com'
+          - base: {type: 'lang-chroot', name: 'node-v0.4.8', uri: 'http://blah.files.com/node-v0.4.8.tar.bz2'}
+          - source: {type: 'git', uri: 'http://blah.git.com/repo.git'}
+          - cmd: '/app/app/blah'
+          - num instances: 4
+          - ram overall: 200 (MB)
+          - ram per instance: 50 (MB)
+          - owner: 'username'
+          - http ports: 1
+          - https ports: 0
+          - tcp ports: 0
+          - udp ports: 0
+      ## Backend Processes
+      - Polls DB VIP for Jobs and launches.
+      - Ensures job stays running, if it crashes N times in X seconds, stop restarting and alert.
+      - Provides pubsub for stdout/stderr of jobs.
+      - Listens for HTTP API Calls
+          - List
+          - Start
+          - Stop
+          - Restart
+          - Stdout
+          - Stderr

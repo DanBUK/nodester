@@ -1,4 +1,39 @@
 <!DOCTYPE html><html lang="en"><head><title>Nodester - Machine Runner</title></head><body><h1>Machine Runner</h1>
 
-<p>A process that sits on a server and manages processes. Similar to /sbin/init; but rather than taking commands from the cli it takes network commands to setup, start, stop, restart, etc applications.
-<strong>TBC</strong>.</p></body></html>
+<p>A process that sits on a server and manages processes. Similar to /sbin/init; but rather than taking commands from the cli it takes network commands to setup, start, stop, restart, etc applications.</p>
+
+<h2>Variables</h2>
+
+<ul>
+<li>free ports: { tcp: { from: 10000, to: 60000 }, udp: { from: 10000, to: 60000 } }</li>
+<li>machine_id: &#39;node01&#39;</li>
+<li>jobs: [.. ..]
+<ul><li>job id: &#39;job1&#39;</li>
+<li>hostname: &#39;job1.example.com&#39;</li>
+<li>base: {type: &#39;lang-chroot&#39;, name: &#39;node-v0.4.8&#39;, uri: &#39;http://blah.files.com/node-v0.4.8.tar.bz2&#39;}</li>
+<li>source: {type: &#39;git&#39;, uri: &#39;http://blah.git.com/repo.git&#39;}</li>
+<li>cmd: &#39;/app/app/blah&#39;</li>
+<li>num instances: 4</li>
+<li>ram overall: 200 (MB)</li>
+<li>ram per instance: 50 (MB)</li>
+<li>owner: &#39;username&#39;</li>
+<li>http ports: 1</li>
+<li>https ports: 0</li>
+<li>tcp ports: 0</li>
+<li>udp ports: 0</li></ul></li>
+</ul>
+
+<h2>Backend Processes</h2>
+
+<ul>
+<li>Polls DB VIP for Jobs and launches.</li>
+<li>Ensures job stays running, if it crashes N times in X seconds, stop restarting and alert.</li>
+<li>Provides pubsub for stdout/stderr of jobs.</li>
+<li>Listens for HTTP API Calls
+<ul><li>List</li>
+<li>Start</li>
+<li>Stop</li>
+<li>Restart</li>
+<li>Stdout</li>
+<li>Stderr</li></ul></li>
+</ul></body></html>
