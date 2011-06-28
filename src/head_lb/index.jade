@@ -5,5 +5,49 @@ html(lang="en")
   body
     :markdown
       # Head LB
-      Handles cluster requests for an app. Runs on head machines. Directs to relevant machine nodes that host the app.
-      **TBC**.
+      Handles cluster HTTP/HTTPS/TCP/UDP requests for an app. Runs on head machines. Directs to relevant machine nodes that host the app.
+      Works in pairs, active/passive utilising simple heart beating and ARP broadcast failover.
+      ## Variables
+      - free ports: { tcp: { from: 10000, to: 60000 }, udp: { from: 10000, to: 60000 } }
+      - machine id: 'head01'
+      - peers: { '192.168.66.2': { port: 778, state: -1 }}
+      - vip ips: { '192.168.222.1': { peer: '192.168.66.2', pools: ['pool name A'] } }
+      - pools: [ .. .. ]
+          - id: 'pool name A'
+          - vip ips: ['192.168.222.1']
+          - type: [ http | https | tcp | tcpssl | udp ]
+          - ssl: [ true | false ] - Auto set for https/tcpssl
+              - sslopts: { key: 'str of key', cert: 'str of cer', ca: 'str of ca' }
+          - key: [ http: 'example.com' | https: 'example.com' | tcp: 10000 | tcpssl: 10000 | udp: 10000 ]
+          - lookup type: hash ring
+          - persistent: true
+          - persistent cache: { }
+          - state: -1
+          - nodes: [ .. .. ]
+              - { host: '192.168.0.1', port: 10000, state: -1, last check: -1 }
+              - { host: '192.168.0.2', port: 10000, state: -1, last check: -1 }
+          - .. ..
+      ## Sub Modules
+      - node-lb
+          - node-http-proxy
+      ## Backend Processes
+      - Monitors peer and if required handles failover of services.
+      - Replicates persistent cache of connections and state of pools/nodes between peers.
+      - Polls DB VIP for Peers, VIPs, Pools and launches them.
+      - Monitors nodes for availability.
+      - Services can bubble up from Machine Runner via API.
+      - Listens for HTTP API Calls
+          - List
+          - ListPeers
+          - ListVIPs
+          - ListPools
+          - AddPeer IP, Port, State
+          - AddVIP IP, Peer, Pools=[]
+          - AddPool ID, VIP=undefined, Type, Key, LookupType, State, Nodes=[][, ssl key, ssl cert, ssl ca]
+          - AddPoolToVIP ID, VIP
+          - AddNodeToPool IP, Port, State, ID
+          - DelPeer IP
+          - DelVIP IP
+          - DelPool ID
+          - DelPoolFromVIP ID, VIP
+          - DelNodeFromPool IP, Port, ID

@@ -8,44 +8,17 @@ html(lang="en")
       Handles incoming HTTP/HTTPS/TCP/UDP requests and directs them to clusters.
       Works in pairs, active/passive utilising simple heart beating and ARP broadcast failover.
       ## Variables
-      - free ports: { tcp: { from: 10000, to: 60000 }, udp: { from: 10000, to: 60000 } }
-      - machine id: 'node01'
-      - peers: { '192.168.111.2': { port: 778, state: -1 }}
-      - external ips: { '7.7.7.7': { peer: '192.168.111.2', pools: ['pool name A'] } }
-      - pools: [ .. .. ]
-          - id: 'pool name A'
-          - external ips: ['7.7.7.7']
-          - type: [ http | https | tcp | tcpssl | udp ]
-          - ssl: [ true | false ] - Auto set for https/tcpssl
-              - sslopts: { key: 'str of key', cert: 'str of cer', ca: 'str of ca' }
-          - key: [ http: 'example.com' | https: 'example.com' | tcp: 10000 | tcpssl: 10000 | udp: 10000 ]
-          - lookup type: hash ring
-          - persistent: true
-          - persistent cache: { }
-          - state: -1
-          - nodes: [ .. .. ]
-              - { host: '192.168.222.1', port: 10000, state: -1, last check: -1 }
-              - { host: '192.168.222.2', port: 10000, state: -1, last check: -1 }
-          - .. ..
+      - **Same as [Head LB][]**
       ## Sub Modules
       - node-lb
           - node-http-proxy
       ## Backend Processes
+      - Monitors peer and if required handles failover of services.
+      - Replicates persistent cache of connections and state of pools/nodes between peers.
       - Polls DB VIP for Peers, External IPs, Pools and launches them.
-      - Monitors nodes for availability
-      - Services can bubble up from Head LB via API
+      - Monitors nodes for availability.
+      - Services can bubble up from Head LB via API.
       - Listens for HTTP API Calls
-          - List
-          - ListPeers
-          - ListExternalIPs
-          - ListPools
-          - AddPeer IP, Port, State
-          - AddExternalIP IP, Peer, Pools=[]
-          - AddPool ID, ExternalIP=undefined, Type, Key, LookupType, State, Nodes=[][, ssl key, ssl cert, ssl ca]
-          - AddPoolToExternalIP ID, ExternalIP
-          - AddNodeToPool IP, Port, State, ID
-          - DelPeer IP
-          - DelExternalIP IP
-          - DelPool ID
-          - DelPoolFromExternalIP ID, ExternalIP
-          - DelNodeFromPool IP, Port, ID
+          - **Same as [Head LB][]**
+      
+      [head lb]: ../head_lb/
